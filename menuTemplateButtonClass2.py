@@ -76,7 +76,7 @@ def my_shell_function():
 
 def my_play_function():
     global level
-    level += 1
+    level += 2
 
 def my_sound_function():
     print('Sound')
