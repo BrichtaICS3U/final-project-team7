@@ -1,121 +1,122 @@
-import pygame, random
-from car import Car
+import math
+import random
+
+import pygame
+
+
 pygame.init()
+screen = pygame.display.set_mode((800, 800))
+rect = screen.get_rect()
+clock = pygame.time.Clock()
 
-GREEN = (20, 255, 140)
-GREY = (210, 210 ,210)
 WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-PURPLE = (255, 0, 255)
-ORANGE = (244, 164, 66)
-YELLOW = (255, 255, 0)
-CYAN = (0, 255, 255)
-BLUE = (100, 100, 255)
 
-speed = 1
-colorList = (RED, GREEN, PURPLE, YELLOW, CYAN, BLUE)
+# Also use the `.convert()` or `.convert_alpha()` methods after
+# loading the images to improve the performance.
+VEHICLE1 = pygame.Surface((40, 70), pygame.SRCALPHA)
+VEHICLE1.fill((244, 83, 66))
+BACKGROUND = pygame.Surface((800, 800))
+BACKGROUND.fill((67, 179, 239))
 
 
-SCREENWIDTH=800
-SCREENHEIGHT=600
+class Entity(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
 
-size = (SCREENWIDTH, SCREENHEIGHT)
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("New Driver Simulator")
 
-all_sprites_list = pygame.sprite.Group()
+class VehicleSprite(Entity):
+    MAX_FORWARD_SPEED = 8
+    MAX_REVERSE_SPEED = 2
+    ACCELERATION = 0.02
+    TURN_SPEED = 0.000000000001
 
-playerCar = Car(ORANGE, 60, 80, 70)
-playerCar.rect.x = 160
-playerCar.rect.y = SCREENHEIGHT - 100
+    def __init__(self, image, position):
+        Entity.__init__(self)
+        self.src_image = image
+        self.image = image
+        self.rect = self.image.get_rect(center=position)
+        self.position = pygame.math.Vector2(position)
+        self.velocity = pygame.math.Vector2(0, 0)
+        self.speed = self.direction = 0
+        self.k_left = self.k_right = self.k_down = self.k_up = 0
 
-car1 = Car(PURPLE, 60, 80, random.randint(50,100))
-car1.rect.x = 60
-car1.rect.y = -100
- 
-car2 = Car(YELLOW, 60, 80, random.randint(50,100))
-car2.rect.x = 160
-car2.rect.y = -600
- 
-car3 = Car(CYAN, 60, 80, random.randint(50,100))
-car3.rect.x = 260
-car3.rect.y = -300
+    def update(self, time):
+        # SIMULATION
+        self.speed += self.k_up + self.k_down
+        # To clamp the speed.
+        self.speed = max(-self.MAX_REVERSE_SPEED,
+                         min(self.speed, self.MAX_FORWARD_SPEED))
 
-car4 = Car(BLUE, 60, 80, random.randint(50,100))
-car4.rect.x = 360
-car4.rect.y = -900
+        # Degrees sprite is facing (direction)
+        self.direction += (self.k_right + self.k_left)
+        rad = math.radians(self.direction)
+        self.velocity.x = -self.speed*math.sin(rad)
+        self.velocity.y = -self.speed*math.cos(rad)
+        self.position += self.velocity
+        self.image = pygame.transform.rotate(self.src_image, self.direction)
+        self.rect = self.image.get_rect(center=self.position)
 
-all_sprites_list.add(playerCar)
-all_sprites_list.add(car1)
-all_sprites_list.add(car2)
-all_sprites_list.add(car3)
-all_sprites_list.add(car4)
 
-all_coming_cars = pygame.sprite.Group()
-all_coming_cars.add(car1)
-all_coming_cars.add(car2)
-all_coming_cars.add(car3)
-all_coming_cars.add(car4)
+class Background(pygame.sprite.Sprite):
 
-carryOn = True
-clock=pygame.time.Clock()
+    def __init__(self, image, location):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = image
+        self.rect = self.image.get_rect(topleft=location)
 
-while carryOn:
+
+def game_loop():
+    background = Background(BACKGROUND, [0, 0])
+    bike = VehicleSprite(VEHICLE1, rect.center)
+
+    bike_group = pygame.sprite.Group(bike)
+    all_sprites = pygame.sprite.Group(bike_group)
+
+    camera = pygame.math.Vector2(0, 0)
+    done = False
+
+    while not done:
+        time = clock.tick(60)
+
         for event in pygame.event.get():
-            if event.type==pygame.QUIT:
-                carryOn=False
-            elif event.type==pygame.KEYDOWN:
-                if event.key==pygame.K_x:
-                     playerCar.moveRight(10)
- 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-                playerCar.moveLeft(5)
-        if keys[pygame.K_RIGHT]:
-                playerCar.moveRight(5)
-        if keys[pygame.K_UP]:
-                speed += 0.05
-        if keys[pygame.K_DOWN]:
-                speed -= 0.05
-            
-        #Game Logic
-        for car in all_coming_cars:
-            car.moveForward(speed)
-            if car.rect.y > SCREENHEIGHT:
-                car.changeSpeed(random.randint(50,100))
-                car.repaint(random.choice(colorList))
-                car.rect.y = -200
+            if event.type == pygame.QUIT:
+                done = True
+            elif event.type == pygame.KEYDOWN:
+                # Bike Input (Player 1)
+                if event.key == pygame.K_d:
+                    bike.k_right = -5
+                elif event.key == pygame.K_a:
+                    bike.k_left = 5
+                elif event.key == pygame.K_w:
+                    bike.k_up = 2
+                elif event.key == pygame.K_s:
+                    bike.k_down = -2
 
-        all_sprites_list.update()
+                elif event.key == pygame.K_ESCAPE:
+                    done = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_d:
+                    bike.k_right = 0
+                elif event.key == pygame.K_a:
+                    bike.k_left = 0
+                elif event.key == pygame.K_w:
+                    bike.k_up = 0
+                elif event.key == pygame.K_s:
+                    bike.k_down = 0
 
-        #Background Screen
-        screen.fill(GREEN)
-        #Road
-        pygame.draw.rect(screen, GREY, [40,0, 400,SCREENHEIGHT])
-        
-        pygame.draw.line(screen, WHITE, [140,0],[140,SCREENHEIGHT],5)
-        
-        pygame.draw.line(screen, WHITE, [240,0],[240,SCREENHEIGHT],5)
-      
-        pygame.draw.line(screen, WHITE, [340,0],[340,SCREENHEIGHT],5)
-        
-        
-        all_sprites_list.draw(screen)
+        camera -= bike.velocity
 
-        #Refresh Screen
+        all_sprites.update(time)
+
+        screen.fill(WHITE)
+        screen.blit(background.image, background.rect)
+
+        for sprite in all_sprites:
+            screen.blit(sprite.image, sprite.rect.topleft+camera)
+
+
         pygame.display.flip()
 
-        #Number of frames per second
-        clock.tick(60)
 
-#Check if there is a car collision
-        car_collision_list = pygame.sprite.spritecollide(playerCar,all_coming_cars,False)
-        for car in car_collision_list:
-            print("Car crash!")
-            carryOn=False
-
-pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
-pygame.mixer.music.load('Sounds/soundtrack.mp3')
-pygame.mixer.music.play(0)
-
+game_loop()
 pygame.quit()
