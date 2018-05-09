@@ -1,127 +1,128 @@
-# Pygame Template File
-# adapted from http://www.101computing.net/getting-started-with-pygame/
+import math
+import random
 
+import pygame
+
+<<<<<<< HEAD
 # Import the pygame library and initialise the game engine
 import pygame, random
 from car import car
+=======
+
+>>>>>>> 546e167a931762e24cbce07b545fc8835de52dfd
 pygame.init()
-
-# Define some colours
-# Colours are defined using RGB values
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREEN = (25, 142, 7)
-RED = (186, 22, 22)
-BLUE = (82, 210, 216)
-YELLOW = (238, 255, 0)
-GREY = (140, 138, 130)
-
-speed = 1
-colorList = (RED, BLACK, BLUE, WHITE, YELLOW)
-
-# Open a new window
-# The window is defined as (width, height), measured in pixels
-size = (800, 600)
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("car race")
-
-#This will be a list that will contain all the spriteswe intend to use in this game.
-all_sprites_list = pygame.sprite.Group()
-
-playerCar = Car(YELLOW, 60,80,20)
-playerCar.rect.x = 160
-playerCar.rect.y =500
-
-car1 = Car(RED, 90, 80, random.randint(50,100))
-car1.rect.x = 60
-car1.rect.y =-600
-
-car2 = Car(BLACK, 60, 80, random.randint(50,100))
-car2.rect.x = 160
-car2.rect.y = -600
-
-car3 = Car(BLUE, 60, 80, random.randint(50,100))
-car3.rect.x = 260
-car3.rect.y = -300
-
-car4 = Car(WHITE, 60, 80, random.randint(50,100))
-car4.rect.x = 360
-car4.rect.y = -900
-
-all_sprites_list.add(playerCar)
-all_sprites_list.add(car1)
-all_sprites_list.add(car2)
-all_sprites_list.add(car3)
-all_sprites_list.add(car4)
-
-all_coming_cars = pygame.sprite.Group()
-all_coming_cars.add(car1)
-all_coming_cars.add(car2)
-all_coming_cars.add(car3)
-all_coming_cars.add(car4)
-
-
-# This loop will continue until the user exits the game
-carryOn = True
-
-# The clock will be used to control how fast the screen updates
+screen = pygame.display.set_mode((800, 800))
+rect = screen.get_rect()
 clock = pygame.time.Clock()
 
-#---------Main Program Loop----------
-while carryOn:
-    # --- Main event loop ---
-    for event in pygame.event.get(): # Player did something
-        if event.type == pygame.QUIT: # Player clicked close button
-            carryOn = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_x:
-                playerCar.moveRight(10)
+WHITE = (255, 255, 255)
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_a]:
-        playerCar.moveLeft(5)
-    if keys[pygame.K_d]:
-        playerCar.moveRight(5)
-    if keys[pygame.K_w]:
-        speed += 0.05
-    if keys[pygame.K_s]:
-        speed -= 0.05
-                    
+# Also use the `.convert()` or `.convert_alpha()` methods after
+# loading the images to improve the performance.
+VEHICLE1 = pygame.Surface((40, 70), pygame.SRCALPHA)
+VEHICLE1.fill((244, 83, 66))
+BACKGROUND = pygame.Surface((800, 800))
+BACKGROUND.fill((67, 179, 239))
 
-    # --- Game logic goes here
-    car_collision_list = pygame.sprite.spritecollide(playerCar,all_coming_cars,False)
-    for car in car_collision_list:
-        print("Car Crash!")
-        carryOn = False
-        
-    for car in all_coming_cars:
-        car.moveUp(speed)
-        if car.rect.y > 600:
-            car.changeSpeed(random.randint(50,100))
-            car.repaint(random.choice(colorList))
-            car.rect.y = -200
-            
-    all_sprites_list.update()
-   
-    # --- Draw code goes here
 
-    # Clear the screen to white
-    screen.fill(GREY)
+class Entity(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
 
-    # Queue different shapes and lines to be drawn
-    pygame.draw.rect(screen, BLACK, [40, 0, 400, 600],5)
-    pygame.draw.line(screen, WHITE, [140,0],[140,600],5)
-    pygame.draw.line(screen, WHITE, [240,0],[240,600],5)
-    pygame.draw.line(screen, WHITE, [340,0],[340,600],5)
 
-    #Draw all sprites in one go.(only have one at the moment                      
-    all_sprites_list.draw(screen)
+class VehicleSprite(Entity):
+    MAX_FORWARD_SPEED = 8
+    MAX_REVERSE_SPEED = 2
+    ACCELERATION = 0.02
+    TURN_SPEED = 0.000000000001
 
-    # Update the screen with queued shapes
-    pygame.display.flip()
+    def __init__(self, image, position):
+        Entity.__init__(self)
+        self.src_image = image
+        self.image = image
+        self.rect = self.image.get_rect(center=position)
+        self.position = pygame.math.Vector2(position)
+        self.velocity = pygame.math.Vector2(0, 0)
+        self.speed = self.direction = 0
+        self.k_left = self.k_right = self.k_down = self.k_up = 0
 
-    # --- Limit to 60 frames per second
-    clock.tick(60)
+    def update(self, time):
+        # SIMULATION
+        self.speed += self.k_up + self.k_down
+        # To clamp the speed.
+        self.speed = max(-self.MAX_REVERSE_SPEED,
+                         min(self.speed, self.MAX_FORWARD_SPEED))
 
-# Once the main program loop is exited, stop the game engine
+        # Degrees sprite is facing (direction)
+        self.direction += (self.k_right + self.k_left)
+        rad = math.radians(self.direction)
+        self.velocity.x = -self.speed*math.sin(rad)
+        self.velocity.y = -self.speed*math.cos(rad)
+        self.position += self.velocity
+        self.image = pygame.transform.rotate(self.src_image, self.direction)
+        self.rect = self.image.get_rect(center=self.position)
+
+
+class Background(pygame.sprite.Sprite):
+
+    def __init__(self, image, location):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = image
+        self.rect = self.image.get_rect(topleft=location)
+
+
+def game_loop():
+    background = Background(BACKGROUND, [0, 0])
+    bike = VehicleSprite(VEHICLE1, rect.center)
+
+    bike_group = pygame.sprite.Group(bike)
+    all_sprites = pygame.sprite.Group(bike_group)
+
+    camera = pygame.math.Vector2(0, 0)
+    done = False
+
+    while not done:
+        time = clock.tick(60)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+            elif event.type == pygame.KEYDOWN:
+                # Bike Input (Player 1)
+                if event.key == pygame.K_d:
+                    bike.k_right = -5
+                elif event.key == pygame.K_a:
+                    bike.k_left = 5
+                elif event.key == pygame.K_w:
+                    bike.k_up = 2
+                elif event.key == pygame.K_s:
+                    bike.k_down = -2
+
+                elif event.key == pygame.K_ESCAPE:
+                    done = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_d:
+                    bike.k_right = 0
+                elif event.key == pygame.K_a:
+                    bike.k_left = 0
+                elif event.key == pygame.K_w:
+                    bike.k_up = 0
+                elif event.key == pygame.K_s:
+                    bike.k_down = 0
+
+        camera -= bike.velocity
+
+        all_sprites.update(time)
+
+        screen.fill(WHITE)
+        screen.blit(background.image, background.rect)
+
+        for sprite in all_sprites:
+            screen.blit(sprite.image, sprite.rect.topleft+camera)
+
+
+        pygame.display.flip()
+
+
+game_loop()
 pygame.quit()
