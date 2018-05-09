@@ -3,8 +3,7 @@
 
 # Import the pygame library and initialise the game engine
 import pygame, random
-
-from car import Car
+from car import car
 pygame.init()
 
 # Define some colours

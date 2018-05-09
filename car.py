@@ -25,12 +25,12 @@ carryOn = True
 clock=pygame.time.Clock()
 
         #Game Logic
-        for car in all_coming_cars:
-            car.moveForward(speed)
-            if car.rect.y > SCREENHEIGHT:
-                car.changeSpeed(random.randint(50,100))
-                car.repaint(random.choice(colorList))
-                car.rect.y = -200
+for car in all_coming_cars:
+    car.moveForward(speed)
+    if car.rect.y > SCREENHEIGHT:
+        car.changeSpeed(random.randint(50,100))
+        car.repaint(random.choice(colorList))
+        car.rect.y = -200
 
         all_sprites_list.update()
 
