@@ -64,7 +64,7 @@ class Button():
         self.bg = self.color
         pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(pos):
-            self.bg = WHITE # mouseover color
+            self.bg = BLUE # mouseover color
 
     def call_back(self):
         """Runs a function when clicked"""
@@ -78,8 +78,10 @@ def my_play_function():
     global level
     level += 2
 
-def my_sound_function():
-    print('Sound')
+def my_continue_function():
+    global level
+    if level == 3:
+        level += 1
 
 
 def my_settings_function():
@@ -119,21 +121,28 @@ def mousebuttondown(level):
             if button.rect.collidepoint(pos):
                 button.call_back()
 
+    elif level == 3:
+        for button in level3_buttons:
+            if button.rect.collidepoint(pos):
+                button.call_back()
+
 level = 1
 carryOn = True
 clock = pygame.time.Clock()
 
 #create button objects
-button_Play = Button('Play', (SCREENWIDTH/12, SCREENHEIGHT/8),my_play_function, bg=(BLUE), fg = (WHITE))
-button_Previous = Button("Return", (SCREENWIDTH/2, SCREENHEIGHT*3/4), my_previous_function, bg=(WHITE))
-button_Quit = Button("Quit", (SCREENWIDTH/12, SCREENHEIGHT*2/3), my_quit_function, bg=(WHITE))
-button_Settings = Button("Settings", (SCREENWIDTH/12, SCREENHEIGHT/2),my_settings_function, bg=(BLUE))
-button_Sound = Button("Sound", (SCREENWIDTH/2, SCREENHEIGHT/4), my_sound_function, bg=(WHITE))
+button_Play = Button('Play', (SCREENWIDTH/12, SCREENHEIGHT/8),my_play_function, bg=(WHITE), fg = (BLACK))
+button_Previous = Button("Return", (SCREENWIDTH/2, SCREENHEIGHT*10/11), my_previous_function, bg=(WHITE))
+button_Quit = Button("Quit", (SCREENWIDTH*6/7, SCREENHEIGHT*10/11), my_quit_function, bg =(WHITE))
+button_Settings = Button("Settings", (SCREENWIDTH/12, SCREENHEIGHT/4),my_settings_function, bg=(WHITE))
 button_On = Button("ON", (SCREENWIDTH/4, SCREENHEIGHT/3), my_on_function, bg=(WHITE))
 button_Off = Button("OFF", (SCREENWIDTH*3/4, SCREENHEIGHT/3), my_off_function, bg=(WHITE))
+button_Continue = Button('Continue',(SCREENWIDTH/2, SCREENHEIGHT*10/11), my_continue_function, bg = (WHITE))
 #arrange button groups depending on level
 level1_buttons = [button_Settings, button_Play, button_Quit]
-level2_buttons = [button_Sound, button_Previous,button_On, button_Off]
+level2_buttons = [button_Previous,button_On, button_Off]
+level3_buttons = [button_Continue]
+level4_buttons = [button_Play]
 
 #---------Main Program Loop----------
 while carryOn:
@@ -155,13 +164,35 @@ while carryOn:
     if level == 1:
         for button in level1_buttons:
             button.draw()
-        font = pygame.font.SysFont('comicsansms',42)
+        font = pygame.font.SysFont('alternategothic',42)
         text = font.render('Auto Racing II',1, WHITE)
-        screen.blit(text, (300,1))
+        screen.blit(text, (275,20))
     elif level == 2:
+        screen.fill(BLUE)
         for button in level2_buttons:
             button.draw()
-
+        font = pygame.font.SysFont('alternategothic',30)
+        text = font.render('Sound',1, WHITE)
+        screen.blit(text, (368, 195))
+    elif level == 3:
+        screen.fill(BLUE)
+        for button in level3_buttons:
+            button.draw()
+            font = pygame.font.SysFont('alternategothic',30)
+        text = font.render('Auto Racing II is a action packed time trial game.',1, WHITE)
+        screen.blit(text,(20,90))
+        text = font.render ('time trial game. Speed through the streets while ',1, WHITE)
+        screen.blit(text, (20,110))
+        text = font.render ('dodging obstacles to record ',1, WHITE)
+        screen.blit(text,(20,130))
+        text = font.render ('the best time possible!',1,WHITE)
+        screen.blit(text,(20,150))
+        
+            
+    elif level == 4:
+         for button in level4_buttons:
+            button.draw()
+        
     # Update the screen with queued shapes
     pygame.display.flip()
 
