@@ -3,13 +3,12 @@ import random
 
 import pygame
 
-
+from car import VehicleSprite
 pygame.init()
 screen = pygame.display.set_mode((1280, 800))
 rect = screen.get_rect()
 clock = pygame.time.Clock()
 
-WHITE = pygame.Color('white')
 # Load images globally and reuse them in your program.
 # Also use the `.convert()` or `.convert_alpha()` methods after
 # loading the images to improve the performance.
@@ -20,29 +19,7 @@ VEHICLE2.fill((200, 120, 20))
 BACKGROUND = pygame.Surface((1280, 800))
 BACKGROUND.fill((30, 30, 30))
 
-
-class Entity(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-
-
-class VehicleSprite(Entity):
-    MAX_FORWARD_SPEED = 6
-    MAX_REVERSE_SPEED = 3.5
-    ACCELERATION = 0.02
-    TURN_SPEED = 0.000000000001
-
-    def __init__(self, image, position):
-        Entity.__init__(self)
-        self.src_image = image
-        self.image = image
-        self.rect = self.image.get_rect(center=position)
-        self.position = pygame.math.Vector2(position)
-        self.velocity = pygame.math.Vector2(0, 0)
-        self.speed = self.direction = 0
-        self.k_left = self.k_right = self.k_down = self.k_up = 0
-
-    def update(self, time):
+def update(self, time):
         # SIMULATION
         self.speed += self.k_up + self.k_down
         # To clamp the speed.
@@ -112,7 +89,6 @@ def game_loop():
 
         all_sprites.update(time)
 
-        screen.fill(WHITE)
         screen.blit(background.image, background.rect)
 
         for sprite in all_sprites:

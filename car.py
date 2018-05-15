@@ -1,121 +1,39 @@
-<<<<<<< HEAD
 import pygame
-WHITE = (255, 255, 255)
- 
-class Car(pygame.sprite.Sprite):
- 
-    def __init__(self, color, width, height, speed):
-        super().__init__()
- 
-        self.image = pygame.Surface([width, height])
-        self.image.fill(WHITE)
-        self.image.set_colorkey(WHITE)
- 
-        self.width=width
-        self.height=height
-        self.color = color
-        self.speed = speed
- 
-        pygame.draw.rect(self.image, self.color, [0, 0, self.width, self.height])
- 
- 
-        self.rect = self.image.get_rect()
- 
-    def moveRight(self, pixels):
-        self.rect.x += pixels
- 
-    def moveLeft(self, pixels):
-        self.rect.x -= pixels
- 
-    def moveForward(self, speed):
-        self.rect.y += self.speed * speed / 20
- 
-    def moveBackward(self, speed):
-        self.rect.y -= self.speed * speed / 20
- 
-    def changeSpeed(self, speed):
-        self.speed = speed
- 
-    def repaint(self, color):
-        self.color = color
-        pygame.draw.rect(self.image, self.color, [0, 0, self.width, self.height])
+import math
+import random
 
-    def rotRight(self):
-        self.angle += self.turnRate
-        if self.speed == 0:
-            self.speed = self.turnRate
-        while self.angle < 0:
-            self.angle += 360
-        self.image = pygame.transform.rotate(self.original, self.angle)
-    def rotLeft(self):
-        self.angle -= self.turnRate
-        if self.speed == 0:
-            self.speed = self.turnRate
-        while self.angle > 359:
-            self.angle -= 360
-        self.image = pygame.transform.rotate(self.original, self.angle)
-=======
-import pygame, random
-from car import Car
-pygame.init()
-
-GREEN = (20, 255, 140)
-GREY = (210, 210 ,210)
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-PURPLE = (255, 0, 255)
-ORANGE = (244, 164, 66)
-YELLOW = (255, 255, 0)
-CYAN = (0, 255, 255)
-BLUE = (100, 100, 255)
-
-speed = 1
-colorList = (RED, GREEN, PURPLE, YELLOW, CYAN, BLUE)
-
-
-SCREENWIDTH=800
-SCREENHEIGHT=800
-
-
-
-carryOn = True
-clock=pygame.time.Clock()
-
-        #Game Logic
-for car in all_coming_cars:
-    car.moveForward(speed)
-    if car.rect.y > SCREENHEIGHT:
-        car.changeSpeed(random.randint(50,100))
-        car.repaint(random.choice(colorList))
-        car.rect.y = -200
-
-        all_sprites_list.update()
-
-        #Background Screen
-        screen.fill(GREEN)
-        #Road
-        pygame.draw.ellipse(screen, GREY, [40,0, 400,SCREENHEIGHT])
+class Entity(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
         
-        
-        
-        
-        all_sprites_list.draw(screen)
+class VehicleSprite(Entity):
+    MAX_FORWARD_SPEED = 6
+    MAX_REVERSE_SPEED = 3.5
+    ACCELERATION = 0.02
+    TURN_SPEED = 0.000000000001
 
-        #Refresh Screen
-        pygame.display.flip()
+    def __init__(self, image, position):
+        Entity.__init__(self)
+        self.src_image = image
+        self.image = image
+        self.rect = self.image.get_rect(center=position)
+        self.position = pygame.math.Vector2(position)
+        self.velocity = pygame.math.Vector2(0, 0)
+        self.speed = self.direction = 0
+        self.k_left = self.k_right = self.k_down = self.k_up = 0
 
-        #Number of frames per second
-        clock.tick(60)
+    def update(self, time):
+        # SIMULATION
+        self.speed += self.k_up + self.k_down
+        # To clamp the speed.
+        self.speed = max(-self.MAX_REVERSE_SPEED,
+                         min(self.speed, self.MAX_FORWARD_SPEED))
 
-#Check if there is a car collision
-        car_collision_list = pygame.sprite.spritecollide(playerCar,all_coming_cars,False)
-        for car in car_collision_list:
-            print("Car crash!")
-            carryOn=False
-
-pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
-pygame.mixer.music.load('Sounds/soundtrack.mp3')
-pygame.mixer.music.play(0)
-
-pygame.quit()
->>>>>>> 8a99c2cb110026dd79232bc397de30e59acfa626
+        # Degrees sprite is facing (direction)
+        self.direction += (self.k_right + self.k_left)
+        rad = math.radians(self.direction)
+        self.velocity.x = -self.speed*math.sin(rad)
+        self.velocity.y = -self.speed*math.cos(rad)
+        self.position += self.velocity
+        self.image = pygame.transform.rotate(self.src_image, self.direction)
+        self.rect = self.image.get_rect(center=self.position)
