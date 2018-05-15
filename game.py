@@ -27,9 +27,9 @@ class Entity(pygame.sprite.Sprite):
 
 
 class VehicleSprite(Entity):
-    MAX_FORWARD_SPEED = 10
-    MAX_REVERSE_SPEED = 2
-    ACCELERATION = 0.05
+    MAX_FORWARD_SPEED = 6
+    MAX_REVERSE_SPEED = 3.5
+    ACCELERATION = 0.02
     TURN_SPEED = 0.000000000001
 
     def __init__(self, image, position):
@@ -69,12 +69,12 @@ class Background(pygame.sprite.Sprite):
 
 def game_loop():
     background = Background(BACKGROUND, [0, 0])
-    bike = VehicleSprite(VEHICLE1, rect.center)
+    car = VehicleSprite(VEHICLE1, rect.center)
     ball = VehicleSprite(VEHICLE2, rect.center)
 
-    bike_group = pygame.sprite.Group(bike)
+    car_group = pygame.sprite.Group(car)
     ball_group = pygame.sprite.Group(ball)
-    all_sprites = pygame.sprite.Group(bike_group, ball_group)
+    all_sprites = pygame.sprite.Group(car_group, ball_group)
 
     camera = pygame.math.Vector2(0, 0)
     done = False
@@ -88,27 +88,27 @@ def game_loop():
             elif event.type == pygame.KEYDOWN:
                 # Bike Input (Player 1)
                 if event.key == pygame.K_d:
-                    bike.k_right = -5
+                    car.k_right = -5
                 elif event.key == pygame.K_a:
-                    bike.k_left = 5
+                    car.k_left = 5
                 elif event.key == pygame.K_w:
-                    bike.k_up = 2
+                    car.k_up = 2
                 elif event.key == pygame.K_s:
-                    bike.k_down = -2
+                    car.k_down = -2
 
                 elif event.key == pygame.K_ESCAPE:
                     done = True
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_d:
-                    bike.k_right = 0
+                    car.k_right = 0
                 elif event.key == pygame.K_a:
-                    bike.k_left = 0
+                    car.k_left = 0
                 elif event.key == pygame.K_w:
-                    bike.k_up = 0
+                    car.k_up = 0
                 elif event.key == pygame.K_s:
-                    bike.k_down = 0
+                    car.k_down = 0
 
-        camera -= bike.velocity
+        camera -= car.velocity
 
         all_sprites.update(time)
 
