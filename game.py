@@ -3,26 +3,22 @@ import random
 
 import pygame
 
-<<<<<<< HEAD
-# Import the pygame library and initialise the game engine
-import pygame, random
-from car import car
-=======
 
->>>>>>> 546e167a931762e24cbce07b545fc8835de52dfd
 pygame.init()
-screen = pygame.display.set_mode((800, 800))
+screen = pygame.display.set_mode((1280, 800))
 rect = screen.get_rect()
 clock = pygame.time.Clock()
 
-WHITE = (255, 255, 255)
-
+WHITE = pygame.Color('white')
+# Load images globally and reuse them in your program.
 # Also use the `.convert()` or `.convert_alpha()` methods after
 # loading the images to improve the performance.
 VEHICLE1 = pygame.Surface((40, 70), pygame.SRCALPHA)
-VEHICLE1.fill((244, 83, 66))
-BACKGROUND = pygame.Surface((800, 800))
-BACKGROUND.fill((67, 179, 239))
+VEHICLE1.fill((130, 180, 20))
+VEHICLE2 = pygame.Surface((40, 70), pygame.SRCALPHA)
+VEHICLE2.fill((200, 120, 20))
+BACKGROUND = pygame.Surface((1280, 800))
+BACKGROUND.fill((30, 30, 30))
 
 
 class Entity(pygame.sprite.Sprite):
@@ -31,9 +27,9 @@ class Entity(pygame.sprite.Sprite):
 
 
 class VehicleSprite(Entity):
-    MAX_FORWARD_SPEED = 8
+    MAX_FORWARD_SPEED = 10
     MAX_REVERSE_SPEED = 2
-    ACCELERATION = 0.02
+    ACCELERATION = 0.05
     TURN_SPEED = 0.000000000001
 
     def __init__(self, image, position):
@@ -74,9 +70,11 @@ class Background(pygame.sprite.Sprite):
 def game_loop():
     background = Background(BACKGROUND, [0, 0])
     bike = VehicleSprite(VEHICLE1, rect.center)
+    ball = VehicleSprite(VEHICLE2, rect.center)
 
     bike_group = pygame.sprite.Group(bike)
-    all_sprites = pygame.sprite.Group(bike_group)
+    ball_group = pygame.sprite.Group(ball)
+    all_sprites = pygame.sprite.Group(bike_group, ball_group)
 
     camera = pygame.math.Vector2(0, 0)
     done = False
@@ -119,7 +117,6 @@ def game_loop():
 
         for sprite in all_sprites:
             screen.blit(sprite.image, sprite.rect.topleft+camera)
-
 
         pygame.display.flip()
 
