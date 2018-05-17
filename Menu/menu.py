@@ -126,6 +126,11 @@ def mousebuttondown(level):
             if button.rect.collidepoint(pos):
                 button.call_back()
 
+    elif level == 4:
+        for button in level4_buttons:
+            if button.rect.collidepoint(pos):
+                button.call_back()
+
 level = 1
 carryOn = True
 clock = pygame.time.Clock()
@@ -142,7 +147,7 @@ button_Continue = Button('Continue',(SCREENWIDTH/2, SCREENHEIGHT*10/11), my_cont
 level1_buttons = [button_Settings, button_Play, button_Quit]
 level2_buttons = [button_Previous,button_On, button_Off]
 level3_buttons = [button_Continue]
-level4_buttons = [button_Play]
+level4_buttons = [button_Quit]
 
 #---------Main Program Loop----------
 while carryOn:
@@ -180,13 +185,13 @@ while carryOn:
             button.draw()
             font = pygame.font.SysFont('alternategothic',30)
         text = font.render('Auto Racing II is a action packed time trial game.',1, WHITE)
-        screen.blit(text,(20,90))
+        screen.blit(text,(150,90))
         text = font.render ('time trial game. Speed through the streets while ',1, WHITE)
-        screen.blit(text, (20,110))
+        screen.blit(text, (150,110))
         text = font.render ('dodging obstacles to record ',1, WHITE)
-        screen.blit(text,(20,130))
+        screen.blit(text,(240,130))
         text = font.render ('the best time possible!',1,WHITE)
-        screen.blit(text,(20,150))
+        screen.blit(text,(250,150))
         
             
     elif level == 4:

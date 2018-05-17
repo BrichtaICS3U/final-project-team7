@@ -3,23 +3,50 @@ import random
 
 import pygame
 
-from car import VehicleSprite
+
+# Import the pygame library and initialise the game engine
+import pygame, random
+from car import Car
+
+
+
 pygame.init()
-screen = pygame.display.set_mode((1280, 800))
+screen = pygame.display.set_mode((800, 800))
 rect = screen.get_rect()
 clock = pygame.time.Clock()
 
-# Load images globally and reuse them in your program.
+WHITE = (255, 255, 255)
+
 # Also use the `.convert()` or `.convert_alpha()` methods after
 # loading the images to improve the performance.
 VEHICLE1 = pygame.Surface((40, 70), pygame.SRCALPHA)
-VEHICLE1.fill((130, 180, 20))
-VEHICLE2 = pygame.Surface((40, 70), pygame.SRCALPHA)
-VEHICLE2.fill((200, 120, 20))
-BACKGROUND = pygame.Surface((1280, 800))
-BACKGROUND.fill((30, 30, 30))
+VEHICLE1.fill((244, 83, 66))
+BACKGROUND = pygame.Surface((800, 800))
+BACKGROUND.fill((67, 179, 239))
 
-def update(self, time):
+
+class Entity(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+
+
+class VehicleSprite(Entity):
+    MAX_FORWARD_SPEED = 8
+    MAX_REVERSE_SPEED = 2
+    ACCELERATION = 0.02
+    TURN_SPEED = 0.000000000001
+
+    def __init__(self, image, position):
+        Entity.__init__(self)
+        self.src_image = image
+        self.image = image
+        self.rect = self.image.get_rect(center=position)
+        self.position = pygame.math.Vector2(position)
+        self.velocity = pygame.math.Vector2(0, 0)
+        self.speed = self.direction = 0
+        self.k_left = self.k_right = self.k_down = self.k_up = 0
+
+    def update(self, time):
         # SIMULATION
         self.speed += self.k_up + self.k_down
         # To clamp the speed.
@@ -46,12 +73,10 @@ class Background(pygame.sprite.Sprite):
 
 def game_loop():
     background = Background(BACKGROUND, [0, 0])
-    car = VehicleSprite(VEHICLE1, rect.center)
-    ball = VehicleSprite(VEHICLE2, rect.center)
+    bike = VehicleSprite(VEHICLE1, rect.center)
 
-    car_group = pygame.sprite.Group(car)
-    ball_group = pygame.sprite.Group(ball)
-    all_sprites = pygame.sprite.Group(car_group, ball_group)
+    bike_group = pygame.sprite.Group(bike)
+    all_sprites = pygame.sprite.Group(bike_group)
 
     camera = pygame.math.Vector2(0, 0)
     done = False
@@ -65,34 +90,36 @@ def game_loop():
             elif event.type == pygame.KEYDOWN:
                 # Bike Input (Player 1)
                 if event.key == pygame.K_d:
-                    car.k_right = -5
+                    bike.k_right = -5
                 elif event.key == pygame.K_a:
-                    car.k_left = 5
+                    bike.k_left = 5
                 elif event.key == pygame.K_w:
-                    car.k_up = 2
+                    bike.k_up = 2
                 elif event.key == pygame.K_s:
-                    car.k_down = -2
+                    bike.k_down = -2
 
                 elif event.key == pygame.K_ESCAPE:
                     done = True
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_d:
-                    car.k_right = 0
+                    bike.k_right = 0
                 elif event.key == pygame.K_a:
-                    car.k_left = 0
+                    bike.k_left = 0
                 elif event.key == pygame.K_w:
-                    car.k_up = 0
+                    bike.k_up = 0
                 elif event.key == pygame.K_s:
-                    car.k_down = 0
+                    bike.k_down = 0
 
-        camera -= car.velocity
+        camera -= bike.velocity
 
         all_sprites.update(time)
 
+        screen.fill(WHITE)
         screen.blit(background.image, background.rect)
 
         for sprite in all_sprites:
             screen.blit(sprite.image, sprite.rect.topleft+camera)
+
 
         pygame.display.flip()
 
