@@ -74,7 +74,6 @@ def game_loop():
                 elif event.key == pygame.K_s:
                     car.k_down = 0
 
-        camera -= car.velocity
 
         all_sprites.update(time)
 
