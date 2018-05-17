@@ -11,7 +11,7 @@ class VehicleSprite(Entity):
     MAX_REVERSE_SPEED = 3.5
     ACCELERATION = 0.02
     TURN_SPEED = 0.000000000001
-
+    
     def __init__(self, image, position):
         Entity.__init__(self)
         self.src_image = image
@@ -21,7 +21,9 @@ class VehicleSprite(Entity):
         self.velocity = pygame.math.Vector2(0, 0)
         self.speed = self.direction = 0
         self.k_left = self.k_right = self.k_down = self.k_up = 0
-
+        self.brake_deceleration = 10
+        self.free_deceleration = 2
+        
     def update(self, time):
         # SIMULATION
         self.speed += self.k_up + self.k_down

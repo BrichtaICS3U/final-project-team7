@@ -191,7 +191,13 @@ while carryOn:
         text = font.render ('dodging obstacles to record ',1, WHITE)
         screen.blit(text,(240,130))
         text = font.render ('the best time possible!',1,WHITE)
+
         screen.blit(text,(250,150))
+
+        screen.blit(text,(20,150))
+        text = font.render ('Use arrow keys to control your car (W A S D)',1,WHITE)
+        screen.blit(text,(20,180))
+
         
             
     elif level == 4:
