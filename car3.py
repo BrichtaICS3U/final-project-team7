@@ -39,3 +39,6 @@ class VehicleSprite(Entity):
         self.position += self.velocity
         self.image = pygame.transform.rotate(self.src_image, self.direction)
         self.rect = self.image.get_rect(center=self.position)
+
+   
+        
