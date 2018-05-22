@@ -3,7 +3,7 @@ import random
 
 import pygame
 
-from car import VehicleSprite
+from car3 import VehicleSprite
 
 
 
@@ -18,7 +18,7 @@ WHITE = pygame.Color('white')
 VEHICLE1 = pygame.Surface((40, 70), pygame.SRCALPHA)
 VEHICLE1.fill((130, 180, 20))
 BACKGROUND = pygame.Surface((1280, 800))
-bg =  pygame.image.load('track3.png')
+bg =  pygame.image.load('track4.png')
 
 
 
@@ -38,54 +38,56 @@ class Background(pygame.sprite.Sprite):
 def game_loop():
     background = Background(BACKGROUND, [0, 0])
     car = VehicleSprite(VEHICLE1, rect.center)
-    
+    camera = pygame.math.Vector2(0,0)
+    done = False
 
     car_group = pygame.sprite.Group(car)
     all_sprites = pygame.sprite.Group(car_group)
-
+    global x
+    global y
+    x = 0
+    y = 0
    
     done = False
 
     while not done:
         time = clock.tick(60)
-        
+        screen.blit(bg,(x,y))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
-            elif event.type == pygame.KEYDOWN:
+        keys = pygame.key.get_pressed()
                 # car Input (Player 1)
-                if event.key == pygame.K_d:
-                    car.k_right = -2
-                elif event.key == pygame.K_a:
-                    car.k_left = 2
-                elif event.key == pygame.K_w:
-                    car.k_up = 0.8
-                elif event.key == pygame.K_s:
-                    car.k_down = -0.1
+        if keys[pygame.K_d]:
+            car.k_right = -2
+            #x -=3
+        elif keys[pygame.K_a]:
+            car.k_left = 2
+            #x += 3
+        elif keys[pygame.K_w]:
+            y += 3
+        elif keys[pygame.K_s]:
+                    #car.k_down = -0.1
+            y -=3
 
-                elif event.key == pygame.K_ESCAPE:
-                    done = True
-            elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_d:
-                    car.k_right = 0
-                elif event.key == pygame.K_a:
-                    car.k_left = 0
-                elif event.key == pygame.K_w:
-                    car.k_up = 0
-                elif event.key == pygame.K_d:
-                    car.k_down = 0
+        if keys[pygame.K_RIGHT]:
+                    #car.k_right = -2
+            car.k_right = 0
+        elif keys[pygame.K_LEFT]:
+                    #car.k_left = 2
+            car.k_left = 0
+        elif keys[pygame.K_UP]:
+            car.k_up = 0
+        elif keys[pygame.K_DOWN]:
+                    #car.k_down = -0.1
+            car.k_down = 0
+
+        camera -= car.velocity
 
     
 
         all_sprites.update(time)
-
-        
-        screen.blit(bg,(0,0))
-        
-
-
-        
-        screen.blit(background.image, background.rect)
+        #screen.blit(background.image, background.rect)
 
 
         for sprite in all_sprites:

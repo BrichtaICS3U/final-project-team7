@@ -205,10 +205,10 @@ while carryOn:
             button.draw()
         
     # Update the screen with queued shapes
-    pygame.display.flip()
+pygame.display.flip()
 
     # --- Limit to 60 frames per second
-    clock.tick(60)
+clock.tick(60)
 
 pygame.quit()
 
