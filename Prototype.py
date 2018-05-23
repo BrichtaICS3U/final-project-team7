@@ -4,9 +4,6 @@ import random
 import pygame
 
 from car3 import VehicleSprite
-
-
-
 pygame.init()
 screen = pygame.display.set_mode((800, 800))
 rect = screen.get_rect()
@@ -19,9 +16,6 @@ VEHICLE1 = pygame.Surface((40, 70), pygame.SRCALPHA)
 VEHICLE1.fill((130, 180, 20))
 BACKGROUND = pygame.Surface((1280, 800))
 BACKGROUND.fill((30, 30, 30))
-
-bg =  pygame.image.load('track3.png')
-
 
 
 class Entity(pygame.sprite.Sprite):
@@ -44,16 +38,6 @@ def game_loop():
     all_sprites = pygame.sprite.Group(car_group)
     
     camera = pygame.math.Vector2(0, 0)
-    camera = pygame.math.Vector2(0,0)
-    done = False
-
-    car_group = pygame.sprite.Group(car)
-    all_sprites = pygame.sprite.Group(car_group)
-    global x
-    global y
-    x = 0
-    y = 0
-   
     done = False
 
     while not done:
@@ -84,38 +68,6 @@ def game_loop():
                     car.k_up = 0
                 elif event.key == pygame.K_s:
                     car.k_down = 0
-                    
-        screen.blit(bg,(x,y))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                done = True
-        keys = pygame.key.get_pressed()
-                # car Input (Player 1)
-        if keys[pygame.K_d]:
-            car.k_right = -2
-            #x -=3
-        elif keys[pygame.K_a]:
-            car.k_left = 2
-            #x += 3
-        elif keys[pygame.K_w]:
-            y += 3
-        elif keys[pygame.K_s]:
-                    #car.k_down = -0.1
-            y -=3
-
-        if keys[pygame.K_RIGHT]:
-                    #car.k_right = -2
-            car.k_right = 0
-        elif keys[pygame.K_LEFT]:
-                    #car.k_left = 2
-            car.k_left = 0
-        elif keys[pygame.K_UP]:
-            car.k_up = 0
-        elif keys[pygame.K_DOWN]:
-                    #car.k_down = -0.1
-            car.k_down = 0
-
-        camera -= car.velocity
 
       
 
@@ -123,8 +75,6 @@ def game_loop():
 
         
         screen.blit(background.image, background.rect)
-        
-        #screen.blit(background.image, background.rect)
 
         for sprite in all_sprites:
             screen.blit(sprite.image, sprite.rect.topleft+camera)
