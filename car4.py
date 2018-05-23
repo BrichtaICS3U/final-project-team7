@@ -2,9 +2,6 @@ import pygame
 import math
 import random
 
-SCREENWIDTH = 800
-SCREENHEIGHT = 800
-
 #class Entity(pygame.sprite.Sprite):
     #def __init__(self):
         #pygame.sprite.Sprite.__init__(self)
@@ -15,7 +12,7 @@ class Player(pygame.sprite.Sprite):
 
         super().__init__()
 
-        self.image = pygame.image.load("download (1).jpg")
+        self.image = pygame.image.load("Photos/car.png")
         self.original = self.image
         self.angle = startangle
         self.rect = self.image.get_rect()
