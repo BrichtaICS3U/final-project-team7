@@ -1,6 +1,13 @@
-import pygame
-import math
+import pygame, math
 import random
+pygame.init()
+WHITE = (255, 255, 255)
+GREY = (127, 127, 127)
+BLACK = (0, 0, 0)
+SCREENWIDTH = 800
+SCREENHEIGHT = 800
+
+
 
 #class Entity(pygame.sprite.Sprite):
     #def __init__(self):
@@ -34,9 +41,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = oldCenter
  
     #def moveForward(self, bx, by):
-        #bx -= math.cos(math.radians(self.angle))*20
+       # bx -= math.cos(math.radians(self.angle))*20
        # by += math.sin(math.radians(self.angle))*20
-        #return bx, by
+       # return bx, by
  
     def moveBackward(self, bx, by, speed):
         if speed >= 5:
@@ -65,6 +72,10 @@ class Player(pygame.sprite.Sprite):
             bx -= math.cos(math.radians(self.angle))*speed
             by += math.sin(math.radians(self.angle))*speed
         return(bx, by, speed)
+
+    def draw(self, screen):
+        self.rect.center = (SCREENWIDTH/2, SCREENHEIGHT/2)
+        screen.blit(self.image, self.rect)
 
    
         
