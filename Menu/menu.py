@@ -1,11 +1,9 @@
-# Menu template with button class and basic menu navigation
-# Adapted from http://www.dreamincode.net/forums/topic/401541-buttons-and-sliders-in-pygame/
-
 import pygame, sys
 pygame.init()
 
 
 BackGround = pygame.image.load('BACKgROUNd reaL.jpg')
+background = pygame.image.load('Level 3 BG.jpg')
 
 # Define some colours
 WHITE = (255, 255, 255)
@@ -70,10 +68,6 @@ class Button():
         """Runs a function when clicked"""
         self.call_back_()
 
-def my_shell_function():
-    """A generic function that prints something in the shell"""
-    print('Fire the nukes!')
-
 def my_play_function():
     global level
     level += 2
@@ -94,6 +88,11 @@ def my_previous_function():
     global level
     level -= 1
 
+def my_Previous_function():
+    """A function that retreats to the previous level"""
+    global level
+    level -= 2
+    
 def my_on_function():
     global level
     #pygame.mixer.unpause()
@@ -138,6 +137,7 @@ clock = pygame.time.Clock()
 #create button objects
 button_Play = Button('Play', (SCREENWIDTH/12, SCREENHEIGHT/8),my_play_function, bg=(WHITE), fg = (BLACK))
 button_Previous = Button("Return", (SCREENWIDTH/2, SCREENHEIGHT*10/11), my_previous_function, bg=(WHITE))
+button_previous = Button("Return", (SCREENWIDTH/2, SCREENHEIGHT*9/11), my_Previous_function, bg=(WHITE))
 button_Quit = Button("Quit", (SCREENWIDTH*6/7, SCREENHEIGHT*10/11), my_quit_function, bg =(WHITE))
 button_Settings = Button("Settings", (SCREENWIDTH/12, SCREENHEIGHT/4),my_settings_function, bg=(WHITE))
 button_On = Button("ON", (SCREENWIDTH/4, SCREENHEIGHT/3), my_on_function, bg=(WHITE))
@@ -146,7 +146,7 @@ button_Continue = Button('Continue',(SCREENWIDTH/2, SCREENHEIGHT*10/11), my_cont
 #arrange button groups depending on level
 level1_buttons = [button_Settings, button_Play, button_Quit]
 level2_buttons = [button_Previous,button_On, button_Off]
-level3_buttons = [button_Continue]
+level3_buttons = [button_Continue, button_previous]
 level4_buttons = [button_Quit]
 
 #---------Main Program Loop----------
@@ -173,30 +173,25 @@ while carryOn:
         text = font.render('Auto Racing II',1, WHITE)
         screen.blit(text, (275,20))
     elif level == 2:
-        screen.fill(BLUE)
+        screen.blit(background,(0,0))
         for button in level2_buttons:
             button.draw()
         font = pygame.font.SysFont('alternategothic',30)
         text = font.render('Sound',1, WHITE)
         screen.blit(text, (368, 195))
     elif level == 3:
-        screen.fill(BLUE)
+        screen.blit(background,(0,0))
         for button in level3_buttons:
             button.draw()
             font = pygame.font.SysFont('alternategothic',30)
-        text = font.render('Auto Racing II is a action packed time trial game.',1, WHITE)
+        text = font.render('Auto Racing II is a high speed racing time trial game.',1, WHITE)
         screen.blit(text,(150,90))
-        text = font.render ('time trial game. Speed through the streets while ',1, WHITE)
+        text = font.render ('Speed through the streets while trying to record the',1, WHITE)
         screen.blit(text, (150,110))
-        text = font.render ('dodging obstacles to record ',1, WHITE)
-        screen.blit(text,(240,130))
-        text = font.render ('the best time possible!',1,WHITE)
-
-        screen.blit(text,(250,150))
-
-        screen.blit(text,(20,150))
+        text = font.render ('best time possible! Remember to drive responsibly',1, WHITE)
+        screen.blit(text,(150,130))
         text = font.render ('Use arrow keys to control your car (W A S D)',1,WHITE)
-        screen.blit(text,(20,180))
+        screen.blit(text,(150,180))
 
         
             
@@ -205,10 +200,9 @@ while carryOn:
             button.draw()
         
     # Update the screen with queued shapes
-pygame.display.flip()
-
+    pygame.display.flip()
     # --- Limit to 60 frames per second
-clock.tick(60)
+    clock.tick(60)
 
 pygame.quit()
 

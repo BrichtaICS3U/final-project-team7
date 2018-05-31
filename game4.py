@@ -57,30 +57,25 @@ y = 0
    
 done = False
 
-while not done:
-    screen.fill(WHITE)
-    screen.blit(bg,(x,y))
-    time = clock.tick(60)
-    for event in pygame.event.get():
+for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+        done = True
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            player.rotLeft(10)          
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            player.rotRight(10)
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
-           x, y, speed = player.accelerate(x, y, speed)
-        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
-            x, y, speed = player.moveBackward(x, y, speed)
-        else:
-            x, y, speed = player.deccelerate(x, y, speed)
+keys = pygame.key.get_pressed()
+if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+    player.rotLeft(7)          
+if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+    player.rotRight(7)
+if keys[pygame.K_UP] or keys[pygame.K_w]:
+    x, y, speed = player.accelerate(x, y, speed)
+if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+    x, y, speed = player.moveBackward(x, y, speed)
+else:
+    x, y, speed = player.deccelerate(x, y, speed)
        
-      
-       
-            
 
     #camera -= player.velocity
-    all_sprites.update(time)
+    all_sprites.update()
     all_sprites.draw(screen)
     
         #screen.blit(background.image, background.rect)
@@ -90,7 +85,7 @@ while not done:
         screen.blit(sprite.image, sprite.rect.topleft)
         
     pygame.display.flip()
-
+    time = clock.tick(60)
 
 game_loop()
 pygame.quit()
