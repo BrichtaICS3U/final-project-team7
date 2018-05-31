@@ -5,7 +5,7 @@ import pygame, sys
 pygame.init()
 
 
-BackGround = pygame.image.load('BACKgROUNd reaL.jpg')
+bg = pygame.image.load('BACKgROUNd reaL.jpg')
 
 # Define some colours
 WHITE = (255, 255, 255)
@@ -70,9 +70,6 @@ class Button():
         """Runs a function when clicked"""
         self.call_back_()
 
-def my_shell_function():
-    """A generic function that prints something in the shell"""
-    print('Fire the nukes!')
 
 def my_play_function():
     global level
@@ -164,7 +161,7 @@ while carryOn:
 
     # Clear the screen to white
     screen.fill(WHITE)
-    screen.blit(BackGround,(0,0))
+    screen.blit(bg,(0,0))
     # Draw buttons
     if level == 1:
         for button in level1_buttons:
@@ -186,29 +183,26 @@ while carryOn:
             font = pygame.font.SysFont('alternategothic',30)
         text = font.render('Auto Racing II is a action packed time trial game.',1, WHITE)
         screen.blit(text,(150,90))
-        text = font.render ('time trial game. Speed through the streets while ',1, WHITE)
+        text = font.render ('time trial game. Speed through the street',1, WHITE)
         screen.blit(text, (150,110))
-        text = font.render ('dodging obstacles to record ',1, WHITE)
+        text = font.render (' to record the best time possible!',1, WHITE)
         screen.blit(text,(240,130))
-        text = font.render ('the best time possible!',1,WHITE)
-
-        screen.blit(text,(250,150))
-
-        screen.blit(text,(20,150))
-        text = font.render ('Use arrow keys to control your car (W A S D)',1,WHITE)
+        
+        text = font.render ('Use arrow keys or (W A S D) to control your car.',1,WHITE)
         screen.blit(text,(20,180))
 
         
             
     elif level == 4:
-         for button in level4_buttons:
+        screen.fill(BLUE)
+        for button in level4_buttons:
             button.draw()
         
     # Update the screen with queued shapes
-pygame.display.flip()
+    pygame.display.flip()
 
     # --- Limit to 60 frames per second
-clock.tick(60)
+    clock.tick(60)
 
 pygame.quit()
 

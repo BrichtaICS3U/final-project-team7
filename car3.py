@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
 
         super().__init__()
 
-        self.image = pygame.image.load("download (1).jpg")
+        self.image = pygame.image.load("download.jpg")
         self.original = self.image
         self.angle = startangle
         self.rect = self.image.get_rect()

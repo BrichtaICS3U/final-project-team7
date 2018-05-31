@@ -42,6 +42,12 @@ class Background(pygame.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect(topleft=location)
 
+def run(self):
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        image_path = os.path.join(current_dir, "car.png")
+        car_image = pygame.image.load(image_path)
+        car = Car(0, 0)
+        ppu = 32
 
 def game_loop():
     background = Background(BACKGROUND, [0, 0])
