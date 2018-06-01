@@ -3,11 +3,10 @@ import random
 
 import pygame
 
+from car3 import Player
 
-# Import the pygame library and initialise the game engine
-import pygame, random
-from car import Car
-
+SCREENWIDTH = 800
+SCREENHEIGHT = 800
 
 
 pygame.init()
@@ -15,52 +14,25 @@ screen = pygame.display.set_mode((800, 800))
 rect = screen.get_rect()
 clock = pygame.time.Clock()
 
-WHITE = (255, 255, 255)
-
-# Also use the `.convert()` or `.convert_alpha()` methods after
+WHITE = pygame.Color('white')
+# Load images globally and reuse them in your program.
 # loading the images to improve the performance.
 VEHICLE1 = pygame.Surface((40, 70), pygame.SRCALPHA)
-VEHICLE1.fill((244, 83, 66))
-BACKGROUND = pygame.Surface((800, 800))
-BACKGROUND.fill((67, 179, 239))
+VEHICLE1.fill((130, 180, 20))
+BACKGROUND = pygame.Surface((1280, 800))
+BACKGROUND.fill((30, 30, 30))
+
+bg =  pygame.image.load('track3.png')
+
+all_sprites_list = pygame.sprite.Group()
+player = Player(0, 0)
+all_sprites_list.add(player)
+
 
 
 class Entity(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-
-
-class VehicleSprite(Entity):
-    MAX_FORWARD_SPEED = 8
-    MAX_REVERSE_SPEED = 2
-    ACCELERATION = 0.02
-    TURN_SPEED = 0.000000000001
-
-    def __init__(self, image, position):
-        Entity.__init__(self)
-        self.src_image = image
-        self.image = image
-        self.rect = self.image.get_rect(center=position)
-        self.position = pygame.math.Vector2(position)
-        self.velocity = pygame.math.Vector2(0, 0)
-        self.speed = self.direction = 0
-        self.k_left = self.k_right = self.k_down = self.k_up = 0
-
-    def update(self, time):
-        # SIMULATION
-        self.speed += self.k_up + self.k_down
-        # To clamp the speed.
-        self.speed = max(-self.MAX_REVERSE_SPEED,
-                         min(self.speed, self.MAX_FORWARD_SPEED))
-
-        # Degrees sprite is facing (direction)
-        self.direction += (self.k_right + self.k_left)
-        rad = math.radians(self.direction)
-        self.velocity.x = -self.speed*math.sin(rad)
-        self.velocity.y = -self.speed*math.cos(rad)
-        self.position += self.velocity
-        self.image = pygame.transform.rotate(self.src_image, self.direction)
-        self.rect = self.image.get_rect(center=self.position)
 
 
 class Background(pygame.sprite.Sprite):
@@ -70,15 +42,41 @@ class Background(pygame.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect(topleft=location)
 
+def run(self):
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        image_path = os.path.join(current_dir, "car.png")
+        car_image = pygame.image.load(image_path)
+        car = Car(0, 0)
+        ppu = 32
 
 def game_loop():
     background = Background(BACKGROUND, [0, 0])
-    bike = VehicleSprite(VEHICLE1, rect.center)
-
-    bike_group = pygame.sprite.Group(bike)
-    all_sprites = pygame.sprite.Group(bike_group)
-
+<<<<<<< HEAD
+    car =(VEHICLE1, rect.center)
+=======
+    car = VehicleSprite(VEHICLE1, rect.center)
+    car_group = pygame.sprite.Group(car)
+    all_sprites = pygame.sprite.Group(car_group)
+    
     camera = pygame.math.Vector2(0, 0)
+>>>>>>> 92e0ee2284d4f6dec4fa75236c7c4a53f1aedc58
+    camera = pygame.math.Vector2(0,0)
+    carryOn = False
+
+    car_group = pygame.sprite.Group(car)
+    all_sprites = pygame.sprite.Group(car_group)
+    global x
+    global y
+    x = 0
+    y = 0
+<<<<<<< HEAD
+
+while carryOn:
+    for event in pygame.event.get():
+        carryOn  = False
+
+=======
+   
     done = False
 
     while not done:
@@ -88,41 +86,94 @@ def game_loop():
             if event.type == pygame.QUIT:
                 done = True
             elif event.type == pygame.KEYDOWN:
-                # Bike Input (Player 1)
+                #Car movement
                 if event.key == pygame.K_d:
-                    bike.k_right = -5
+                    car.k_right = -2
                 elif event.key == pygame.K_a:
-                    bike.k_left = 5
+                    car.k_left = 2
                 elif event.key == pygame.K_w:
-                    bike.k_up = 2
+                    car.k_up = 0.1
                 elif event.key == pygame.K_s:
-                    bike.k_down = -2
+                    car.k_down = -0.1
 
                 elif event.key == pygame.K_ESCAPE:
                     done = True
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_d:
-                    bike.k_right = 0
+                    car.k_right = 0
                 elif event.key == pygame.K_a:
-                    bike.k_left = 0
+                    car.k_left = 0
                 elif event.key == pygame.K_w:
-                    bike.k_up = 0
+                    car.k_up = 0
                 elif event.key == pygame.K_s:
-                    bike.k_down = 0
+                    car.k_down = 0
+                    
+        screen.blit(bg,(x,y))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+>>>>>>> 92e0ee2284d4f6dec4fa75236c7c4a53f1aedc58
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_d]:
+            car.k_right = -2
+            x -=3
+        elif keys[pygame.K_a]:
+            car.k_left = 2
+            x += 3
+        elif keys[pygame.K_w]:
+            y += 3
+        elif keys[pygame.K_s]:
+            car.k_down = -0.1
+            y -=3
+        if keys[pygame.K_RIGHT]:
+            car.k_right = -2
+            car.k_right = 0
+        elif keys[pygame.K_LEFT]:
+            car.k_left = 2
+            car.k_left = 0
+        elif keys[pygame.K_UP]:
+            car.k_up = 0
+        elif keys[pygame.K_DOWN]:
+            car.k_down = -0.1
+            car.k_down = 0
 
-        camera -= bike.velocity
+            camera -= car.velocity
+
+            carryOn = True
+            time = clock.tick(60)
+            screen.blit(bg,(x,y))
+        
+
+           # keys = pygame.key.get_pressed()
+       # if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+          # player.rotLeft(2)          
+      #  if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+          #  player.rotRight(2)
+       # if keys[pygame.K_UP] or keys[pygame.K_w]:
+            #y += 3
+           # x, y = player.moveForward(x, y)
+        #if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            #y -=3
+            #x, y = player.moveForward(x, y)
+       
+
+#car Input (Player 1)
+    
+
+      
 
         all_sprites.update(time)
 
-        screen.fill(WHITE)
+        
         screen.blit(background.image, background.rect)
+        
+        #screen.blit(background.image, background.rect)
 
         for sprite in all_sprites:
             screen.blit(sprite.image, sprite.rect.topleft+camera)
 
-
         pygame.display.flip()
 
 
-game_loop()
-pygame.quit()
+    game_loop()
+    pygame.quit()

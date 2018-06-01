@@ -37,17 +37,24 @@ class Background(pygame.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect(topleft=location)
 
+def game_loop():
+    background = Background(BACKGROUND, [0, 0])
+    car = VehicleSprite(VEHICLE1, rect.center)
+    car_group = pygame.sprite.Group(car)
+    all_sprites = pygame.sprite.Group(car_group)
+
 
 
 camera = pygame.math.Vector2(0,0)
 
 
-global x+
+global x
 global y
 x = 1
 y = 1
    
 done = False
+
 
 while not done:
 
@@ -71,7 +78,6 @@ while not done:
             x, y = player.deccelerate(x, y)
        
       
-       
     all_sprites.update()
     all_sprites.draw(screen)
     
@@ -80,7 +86,7 @@ while not done:
 
     time = clock.tick(60)
     pygame.display.flip()
-
+    time = clock.tick(60)
 
 game_loop()
 pygame.quit()
