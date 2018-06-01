@@ -25,6 +25,10 @@ SCREENHEIGHT = 800
 size = (SCREENWIDTH, SCREENHEIGHT)
 screen = pygame.display.set_mode(size)
 
+pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
+pygame.mixer.music.load('Black Panther - Trailer Song (Vince Staples - BagBak).mp3')
+pygame.mixer.music.play(-1)
+
 class Button():
     """This is a class for a generic button.
     
@@ -140,7 +144,7 @@ clock = pygame.time.Clock()
 
 #create button objects
 button_Play = Button('Play', (SCREENWIDTH/12, SCREENHEIGHT/8),my_play_function, bg=(WHITE), fg = (BLACK))
-button_Previous = Button("Return", (SCREENWIDTH/2, SCREENHEIGHT*10/11), my_previous_function, bg=(WHITE))
+button_Previous = Button("TReturn", (SCREENWIDTH/2, SCREENHEIGHT*10/11), my_previous_function, bg=(WHITE))
 button_previous = Button("Return", (SCREENWIDTH/2, SCREENHEIGHT*9/11), my_Previous_function, bg=(WHITE))
 button_Quit = Button("Quit", (SCREENWIDTH*6/7, SCREENHEIGHT*10/11), my_quit_function, bg =(WHITE))
 button_Settings = Button("Settings", (SCREENWIDTH/12, SCREENHEIGHT/4),my_settings_function, bg=(WHITE))
@@ -155,57 +159,51 @@ level4_buttons = [button_Quit]
 
 #---------Main Program Loop----------
 while carryOn:
-    # --- Main event loop ---
     for event in pygame.event.get(): # Player did something
         if event.type == pygame.QUIT: # Player clicked close button
             carryOn = False
-        elif event.type == pygame.MOUSEBUTTONDOWN: # Player clicked the mouse
-            mousebuttondown(level)
+    elif event.type == pygame.MOUSEBUTTONDOWN: # Player clicked the mouse
+        mousebuttondown(level)
+        screen.fill(WHITE)
+        screen.blit(bg,(0,0))
 
-    # --- Game logic goes here
-
-    # --- Draw code goes here
-
-    # Clear the screen to white
-    screen.fill(WHITE)
-    screen.blit(bg,(0,0))
-    # Draw buttons
     if level == 1:
         for button in level1_buttons:
             button.draw()
-        font = pygame.font.SysFont('alternategothic',42)
-        text = font.render('Auto Racing II',1, WHITE)
-        screen.blit(text, (275,20))
+            font = pygame.font.SysFont('alternategothic',42)
+            text = font.render('Auto Racing II',1, WHITE)
+            screen.blit(text, (275,20))
+
     elif level == 2:
         screen.blit(background,(0,0))
         for button in level2_buttons:
             button.draw()
-        font = pygame.font.SysFont('alternategothic',30)
-        text = font.render('Sound',1, WHITE)
-        screen.blit(text, (368, 195))
+            font = pygame.font.SysFont('alternategothic',30)
+            text = font.render('Sound',1, WHITE)
+            screen.blit(text, (368, 195))
+
     elif level == 3:
         screen.blit(background,(0,0))
         for button in level3_buttons:
             button.draw()
             font = pygame.font.SysFont('alternategothic',30)
-        text = font.render ('Speed through the streets while trying to record the',1, WHITE)
-        screen.blit(text, (150,110))
-        text = font.render ('best time possible! Remember to drive responsibly',1, WHITE)
-        screen.blit(text,(150,130))
-        text = font.render ('Use arrow keys to control your car (W A S D)',1,WHITE)
-        screen.blit(text,(150,180)
-
-
-
+            text = font.render ('Speed through the streets while trying to record the',1, WHITE)
+            screen.blit(text, (150,110))
+            text = font.render ('best time possible! Remember to stay on the road.',1, WHITE)
+            screen.blit(text,(150,130))
+            text = font.render ('Use arrow keys to control your car (W A S D)',1,WHITE)
+            screen.blit(text,(150,180)
 
     elif level == 4:
         screen.fill(BLUE)
         for button in level4_buttons:
             button.draw()
-        
-    # Update the screen with queued shapes
+
+
+# Update the screen with queued shapes
     pygame.display.flip()
     clock.tick(60)
 
+   
 pygame.quit()
 
