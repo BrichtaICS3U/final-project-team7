@@ -22,6 +22,10 @@ SCREENHEIGHT = 800
 size = (SCREENWIDTH, SCREENHEIGHT)
 screen = pygame.display.set_mode(size)
 
+pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
+pygame.mixer.music.load('Black Panther - Trailer Song (Vince Staples - BagBak).mp3')
+pygame.mixer.music.play(-1)
+
 class Button():
     """This is a class for a generic button.
     
@@ -188,7 +192,7 @@ while carryOn:
         screen.blit(text,(150,90))
         text = font.render ('Speed through the streets while trying to record the',1, WHITE)
         screen.blit(text, (150,110))
-        text = font.render ('best time possible! Remember to drive responsibly',1, WHITE)
+        text = font.render ('best time possible! Remember to stay on the road.',1, WHITE)
         screen.blit(text,(150,130))
         text = font.render ('Use arrow keys to control your car (W A S D)',1,WHITE)
         screen.blit(text,(150,180))
@@ -198,11 +202,13 @@ while carryOn:
     elif level == 4:
          for button in level4_buttons:
             button.draw()
-        
-    # Update the screen with queued shapes
+
+
+# Update the screen with queued shapes
     pygame.display.flip()
     # --- Limit to 60 frames per second
     clock.tick(60)
 
+   
 pygame.quit()
 
