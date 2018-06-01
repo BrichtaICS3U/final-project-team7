@@ -42,25 +42,27 @@ class Background(pygame.sprite.Sprite):
 camera = pygame.math.Vector2(0,0)
 
 
-global x
+global x+
 global y
-x = 0
-y = 0
+x = 1
+y = 1
    
 done = False
 
 while not done:
 
-    screen.fill(BLUE)
-    screen.blit(bg,(x,y))
-
     for event in pygame.event.get():
-    
+        if event.type == pygame.QUIT:
+            done = True
+
+        screen.fill(BLUE)
+        screen.blit(bg,(x,y))
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            player.rotLeft(10)          
+            player.rotLeft(5)          
         elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            player.rotRight(10)
+            player.rotRight(5)
         elif keys[pygame.K_UP] or keys[pygame.K_w]:
             x, y = player.accelerate(x, y)
         elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
@@ -76,9 +78,8 @@ while not done:
         
 
 
-        
-    pygame.display.flip()
     time = clock.tick(60)
+    pygame.display.flip()
 
 
 game_loop()
