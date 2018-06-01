@@ -87,5 +87,5 @@ else:
     pygame.display.flip()
     time = clock.tick(60)
 
-game_loop()
+    
 pygame.quit()
