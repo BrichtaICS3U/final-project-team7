@@ -162,40 +162,43 @@ while carryOn:
     for event in pygame.event.get(): # Player did something
         if event.type == pygame.QUIT: # Player clicked close button
             carryOn = False
-    elif event.type == pygame.MOUSEBUTTONDOWN: # Player clicked the mouse
-        mousebuttondown(level)
-        screen.fill(WHITE)
-        screen.blit(bg,(0,0))
+        elif event.type == pygame.MOUSEBUTTONDOWN: # Player clicked the mouse
+            mousebuttondown(level)
 
+
+
+
+    screen.fill(WHITE)
+    screen.blit(bg,(0,0))
     if level == 1:
         for button in level1_buttons:
             button.draw()
-            font = pygame.font.SysFont('alternategothic',42)
-            text = font.render('Auto Racing II',1, WHITE)
-            screen.blit(text, (275,20))
+        font = pygame.font.SysFont('alternategothic',42)
+        text = font.render('Auto Racing II',1, WHITE)
+        screen.blit(text, (275,20))
 
     elif level == 2:
         screen.blit(background,(0,0))
         for button in level2_buttons:
             button.draw()
-            font = pygame.font.SysFont('alternategothic',30)
-            text = font.render('Sound',1, WHITE)
-            screen.blit(text, (368, 195))
+        font = pygame.font.SysFont('alternategothic',30)
+        text = font.render('Sound',1, WHITE)
+        screen.blit(text, (368, 195))
 
     elif level == 3:
         screen.blit(background,(0,0))
         for button in level3_buttons:
             button.draw()
             font = pygame.font.SysFont('alternategothic',30)
-            text = font.render ('Speed through the streets while trying to record the',1, WHITE)
-            screen.blit(text, (150,110))
-            text = font.render ('best time possible! Remember to stay on the road.',1, WHITE)
-            screen.blit(text,(150,130))
-            text = font.render ('Use arrow keys to control your car (W A S D)',1,WHITE)
-            screen.blit(text,(150,180)
+        text = font.render ('Speed through the streets while trying to record the',1, WHITE)
+        screen.blit(text, (150,110))
+        text = font.render ('best time possible! Remember to stay on the road.',1, WHITE)
+        screen.blit(text,(150,130))
+        text = font.render ('Use arrow keys to control your car (W A S D)',1,WHITE)
+        screen.blit(text,(150,180))
+
 
     elif level == 4:
-        screen.fill(BLUE)
         for button in level4_buttons:
             button.draw()
 

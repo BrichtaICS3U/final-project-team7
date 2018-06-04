@@ -67,7 +67,7 @@ class Player(pygame.sprite.Sprite):
             self.speed = 0
             x -= math.cos(math.radians(self.angle))*self.speed
             y += math.sin(math.radians(self.angle))*self.speed
-        return(x, y)
+        return x, y
 
     def draw(self, screen):
         self.rect.center = (SCREENWIDTH/2, SCREENHEIGHT/2)
