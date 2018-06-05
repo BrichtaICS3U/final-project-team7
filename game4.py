@@ -34,7 +34,6 @@ class Background(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=location)
 
 def game_loop():
-    car = Player(VEHICLE1, rect.center)
     car_group = pygame.sprite.Group(player)
     all_sprites = pygame.sprite.Group(car_group)
 
@@ -52,29 +51,31 @@ done = False
 
 while not done:
     screen.fill(WHITE)
-    screen.blit(bg,[0,0])
+    screen.blit(bg,[x,y])
+
+    print(x,y)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
 
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-                player.rotLeft(7)
-            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-                player.rotRight(7)
-            if keys[pygame.K_UP] or keys[pygame.K_w]:
-                x, y = player.accelerate(x, y)
-            if keys[pygame.K_DOWN] or keys[pygame.K_s]:
-                x, y,  = player.moveBackward(x, y,)
-            else:
-                x, y = player.deccelerate(x, y)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            player.rotLeft(7)
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            player.rotRight(7)
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
+            x, y, speed = player.accelerate(x, y, speed)
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            x, y,  = player.moveBackward(x, y,)
+        else:
+            x, y = player.deccelerate(x, y)
 
         all_sprites.update()
         all_sprites.draw(screen)
-        
-        time = clock.tick(60)
+
         pygame.display.flip()
+        time = clock.tick(60)
 
 game_loop()
 pygame.quit()
