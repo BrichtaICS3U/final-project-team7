@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
 
         super().__init__()
 
+
         self.image = pygame.image.load("download.png")
         self.original = self.image
         self.angle = startangle
@@ -40,38 +41,33 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = oldCenter
  
-    #def moveForward(self, bx, by):
-       # bx -= math.cos(math.radians(self.angle))*20
-       # by += math.sin(math.radians(self.angle))*20
-       # return bx, by
- 
-    def moveBackward(self, bx, by, speed):
-        if speed >= 5:
-            speed -= 5
-            bx += math.cos(math.radians(self.angle))*speed
-            by -= math.sin(math.radians(self.angle))*speed
-        elif speed >= 0:
-            speed +=5
-            bx += math.cos(math.radians(self.angle))*speed
-            by -= math.sin(math.radians(self.angle))*speed
-        return bx, by, speed
+    def moveBackward(self, x, y):
+        if self.speed >= 5:
+            self.speed -= 5
+            x += math.cos(math.radians(self.angle))*self.speed
+            y -= math.sin(math.radians(self.angle))*self.speed
+        elif self.speed >= 0:
+            self.speed += 5
+            x += math.cos(math.radians(self.angle))*self.speed
+            y -= math.sin(math.radians(self.angle))*self.speed
+        return x, y
     
-    def accelerate(self, bx, by, speed):
-        speed +=5
-        bx -= math.cos(math.radians(self.angle))*speed
-        by += math.sin(math.radians(self.angle))*speed
-        return bx, by, speed
+    def accelerate(self, x, y):
+        self.speed += 5
+        x -= math.cos(math.radians(self.angle))*self.speed
+        y += math.sin(math.radians(self.angle))*self.speed
+        return x, y
     
-    def deccelerate(self, bx, by, speed):
-        if speed >= 5:
-            speed *= 0.95
-            bx -= math.cos(math.radians(self.angle))*speed
-            by += math.sin(math.radians(self.angle))*speed
-        elif speed >= 0:
-            speed = 0
-            bx -= math.cos(math.radians(self.angle))*speed
-            by += math.sin(math.radians(self.angle))*speed
-        return(bx, by, speed)
+    def deccelerate(self, x, y):
+        if self.speed >= 5:
+            self.speed *= 0.95
+            x -= math.cos(math.radians(self.angle))*self.speed
+            y += math.sin(math.radians(self.angle))*self.speed
+        elif self.speed >= 0:
+            self.speed = 0
+            x -= math.cos(math.radians(self.angle))*self.speed
+            y += math.sin(math.radians(self.angle))*self.speed
+        return x, y
 
     def draw(self, screen):
         self.rect.center = (SCREENWIDTH/2, SCREENHEIGHT/2)

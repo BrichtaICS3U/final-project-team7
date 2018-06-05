@@ -1,9 +1,12 @@
 import pygame, sys
 pygame.init()
+from Carclass import Player
 
 
+bg = pygame.image.load('BACKgROUNd reaL.jpg')
 BackGround = pygame.image.load('BACKgROUNd reaL.jpg')
 background = pygame.image.load('Level 3 BG.jpg')
+
 
 # Define some colours
 WHITE = (255, 255, 255)
@@ -70,6 +73,7 @@ class Button():
     def call_back(self):
         """Runs a function when clicked"""
         self.call_back_()
+
 
 def my_play_function():
     global level
@@ -139,7 +143,7 @@ clock = pygame.time.Clock()
 
 #create button objects
 button_Play = Button('Play', (SCREENWIDTH/12, SCREENHEIGHT/8),my_play_function, bg=(WHITE), fg = (BLACK))
-button_Previous = Button("Return", (SCREENWIDTH/2, SCREENHEIGHT*10/11), my_previous_function, bg=(WHITE))
+button_Previous = Button("TReturn", (SCREENWIDTH/2, SCREENHEIGHT*10/11), my_previous_function, bg=(WHITE))
 button_previous = Button("Return", (SCREENWIDTH/2, SCREENHEIGHT*9/11), my_Previous_function, bg=(WHITE))
 button_Quit = Button("Quit", (SCREENWIDTH*6/7, SCREENHEIGHT*10/11), my_quit_function, bg =(WHITE))
 button_Settings = Button("Settings", (SCREENWIDTH/12, SCREENHEIGHT/4),my_settings_function, bg=(WHITE))
@@ -150,45 +154,40 @@ button_Continue = Button('Continue',(SCREENWIDTH/2, SCREENHEIGHT*10/11), my_cont
 level1_buttons = [button_Settings, button_Play, button_Quit]
 level2_buttons = [button_Previous,button_On, button_Off]
 level3_buttons = [button_Continue, button_previous]
-level4_buttons = [button_Quit]
 
 #---------Main Program Loop----------
 while carryOn:
-    # --- Main event loop ---
     for event in pygame.event.get(): # Player did something
         if event.type == pygame.QUIT: # Player clicked close button
             carryOn = False
         elif event.type == pygame.MOUSEBUTTONDOWN: # Player clicked the mouse
             mousebuttondown(level)
 
-    # --- Game logic goes here
 
-    # --- Draw code goes here
 
-    # Clear the screen to white
+
     screen.fill(WHITE)
-    screen.blit(BackGround,(0,0))
-    # Draw buttons
+    screen.blit(bg,(0,0))
     if level == 1:
         for button in level1_buttons:
             button.draw()
         font = pygame.font.SysFont('alternategothic',42)
         text = font.render('Auto Racing II',1, WHITE)
         screen.blit(text, (275,20))
+
     elif level == 2:
-        screen.blit(background,(0,0))
+        screen.blit(background,(x,y))
         for button in level2_buttons:
             button.draw()
         font = pygame.font.SysFont('alternategothic',30)
         text = font.render('Sound',1, WHITE)
         screen.blit(text, (368, 195))
+
     elif level == 3:
         screen.blit(background,(0,0))
         for button in level3_buttons:
             button.draw()
             font = pygame.font.SysFont('alternategothic',30)
-        text = font.render('Auto Racing II is a high speed racing time trial game.',1, WHITE)
-        screen.blit(text,(150,90))
         text = font.render ('Speed through the streets while trying to record the',1, WHITE)
         screen.blit(text, (150,110))
         text = font.render ('best time possible! Remember to stay on the road.',1, WHITE)
@@ -196,16 +195,86 @@ while carryOn:
         text = font.render ('Use arrow keys to control or WASD to control car',1,WHITE)
         screen.blit(text,(150,180))
 
-        
-            
+
     elif level == 4:
-         for button in level4_buttons:
-            button.draw()
+        import math
+        import random
+        import pygame
+        
+
+        pygame.init()
+        screen = pygame.display.set_mode((800, 800))
+        clock = pygame.time.Clock()
+
+        WHITE =  (255,255,255)
+        bg =  pygame.image.load('track4.png')
+        all_sprites = pygame.sprite.Group()
+        player = Player(0, 0)
+        all_sprites.add(player)
+
+        class Entity(pygame.sprite.Sprite):
+            def __init__(self):
+                pygame.sprite.Sprite.__init__(self)
+
+
+        class Background(pygame.sprite.Sprite):
+            def __init__(self, image, location):
+                pygame.sprite.Sprite.__init__(self)
+                self.image = image
+                self.rect = self.image.get_rect(topleft=location)
+
+        def game_loop():
+            
+            car_group = pygame.sprite.Group(player)
+            all_sprites = pygame.sprite.Group(car_group)
+
+            camera = pygame.math.Vector2(0, 0)
+
+            global speed
+            speed = 5
+
+            global x
+            global y
+
+        x = 0
+        y = 0
+
+        done = False
+
+        while not done:
+            screen.fill(WHITE)
+            screen.blit(bg,[0,0])
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    done = True
+
+                    keys = pygame.key.get_pressed()
+                    if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                        player.rotLeft(7)
+                    if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                        player.rotRight(7)
+                    if keys[pygame.K_UP] or keys[pygame.K_w]:
+                        x, y = player.accelerate(x, y)
+                    if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                        x, y,  = player.moveBackward(x, y,)
+                    else:
+                        x, y = player.deccelerate(x, y)
+
+                all_sprites.update()
+                all_sprites.draw(screen)
+        
+                time = clock.tick(60)
+                pygame.display.flip()
+
+
+        game_loop()
+        pygame.quit()
+        
 
 
 # Update the screen with queued shapes
     pygame.display.flip()
-    # --- Limit to 60 frames per second
     clock.tick(60)
 
    
