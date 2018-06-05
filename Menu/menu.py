@@ -25,7 +25,6 @@ screen = pygame.display.set_mode(size)
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
 pygame.mixer.music.load('Black Panther - Trailer Song (Vince Staples - BagBak).mp3')
 pygame.mixer.music.play(-1)
-
 class Button():
     """This is a class for a generic button.
     
@@ -194,7 +193,7 @@ while carryOn:
         screen.blit(text, (150,110))
         text = font.render ('best time possible! Remember to stay on the road.',1, WHITE)
         screen.blit(text,(150,130))
-        text = font.render ('Use arrow keys to control your car (W A S D)',1,WHITE)
+        text = font.render ('Use arrow keys to control or WASD to control car',1,WHITE)
         screen.blit(text,(150,180))
 
         

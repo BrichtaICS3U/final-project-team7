@@ -4,13 +4,12 @@ import random
 
 import pygame
 
-from car4 import Player
+from Carclass import Player
 
 
 
 pygame.init()
 screen = pygame.display.set_mode((800, 800))
-rect = screen.get_rect()
 clock = pygame.time.Clock()
 
 WHITE =  (255,255,255)
@@ -87,5 +86,4 @@ else:
     pygame.display.flip()
     time = clock.tick(60)
 
-    
 pygame.quit()
