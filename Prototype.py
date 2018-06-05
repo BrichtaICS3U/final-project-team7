@@ -3,7 +3,7 @@ import random
 
 import pygame
 
-from car3 import VehicleSprite
+from car4 import Player
 pygame.init()
 screen = pygame.display.set_mode((800, 800))
 rect = screen.get_rect()
@@ -39,7 +39,7 @@ def run(self):
         
 def game_loop():
     background = Background(BACKGROUND, [0, 0])
-    car = VehicleSprite(VEHICLE1, rect.center)
+    car = Player(VEHICLE1, rect.center)
     car_group = pygame.sprite.Group(car)
     all_sprites = pygame.sprite.Group(car_group)
     
@@ -52,28 +52,19 @@ def game_loop():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
-            elif event.type == pygame.KEYDOWN:
-                #Car movement
-                if event.key == pygame.K_d:
-                    car.k_right = -2
-                elif event.key == pygame.K_a:
-                    car.k_left = 2
-                elif event.key == pygame.K_w:
-                    car.k_up = 0.1
-                elif event.key == pygame.K_s:
-                    car.k_down = -0.1
 
-                elif event.key == pygame.K_ESCAPE:
-                    done = True
-            elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_d:
-                    car.k_right = 0
-                elif event.key == pygame.K_a:
-                    car.k_left = 0
-                elif event.key == pygame.K_w:
-                    car.k_up = 0
-                elif event.key == pygame.K_s:
-                    car.k_down = 0
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                    player.rotLeft(7)
+                if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                    player.rotRight(7)
+                if keys[pygame.K_UP] or keys[pygame.K_w]:
+                    x, y = player.accelerate(x, y)
+                if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                     x, y,  = player.moveBackward(x, y,)
+                else:
+                     x, y = player.deccelerate(x, y)
+
 
       
 
