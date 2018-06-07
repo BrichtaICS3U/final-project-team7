@@ -236,10 +236,7 @@ while carryOn:
             
             car_group = pygame.sprite.Group(player)
             all_sprites = pygame.sprite.Group(car_group)
-
-            camera = pygame.math.Vector2(0, 0)
             
-           
             done = False
 
             while not done:
@@ -247,21 +244,17 @@ while carryOn:
                 screen.fill(WHITE)
                 screen.blit(bg,(x,y))
 
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        done = True
-                    
-                    keys = pygame.key.get_pressed()
-                    if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-                        player.rotLeft(7)
-                    if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-                        player.rotRight(7)
-                    if keys[pygame.K_UP] or keys[pygame.K_w]:
-                        x, y, speed = player.accelerate(x,y,speed)
-                    if keys[pygame.K_DOWN] or keys[pygame.K_s]:
-                        x, y, speed = player.moveBackward(x,y,speed)
-                    else:
-                        x, y, speed = player.deccelerate(x, y, speed)
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                    player.rotLeft(7)
+                if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                    player.rotRight(7)
+                if keys[pygame.K_UP] or keys[pygame.K_w]:
+                    x, y, speed = player.accelerate(x,y,speed)
+                if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                    x, y, speed = player.moveBackward(x,y,speed)
+                else:
+                    x, y, speed = player.deccelerate(x, y, speed)
                    
 
                     all_sprites.update()
@@ -269,6 +262,10 @@ while carryOn:
         
                     time = clock.tick(60)
                     pygame.display.flip()
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        done = True
                     
 
 

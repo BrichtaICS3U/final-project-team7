@@ -44,29 +44,29 @@ class Player(pygame.sprite.Sprite):
     def moveBackward(self, x, y, speed):
         if speed >= 7:
             speed -= 7
-            x += math.cos(math.radians(self.angle))*self.speed
-            y -= math.sin(math.radians(self.angle))*self.speed
-        elif self.speed >= 0:
+            x -= math.cos(math.radians(self.angle))*speed
+            y += math.sin(math.radians(self.angle))*speed
+        elif speed >= 0:
             speed += 7
-            x += math.cos(math.radians(self.angle))*self.speed
-            y -= math.sin(math.radians(self.angle))*self.speed
+            x -= math.cos(math.radians(self.angle))*speed
+            y += math.sin(math.radians(self.angle))*speed
         return x, y, speed
     
     def accelerate(self, x, y, speed):
-        speed += 10
-        x += math.cos(math.radians(self.angle))*self.speed
-        y -= math.sin(math.radians(self.angle))*self.speed
+        speed += 4.99
+        x -= math.cos(math.radians(self.angle))*speed
+        y += math.sin(math.radians(self.angle))*speed
         return x, y, speed
     
     def deccelerate(self, x, y, speed):
-        if speed >= 5:
+        if speed >= 3:
             speed *= 1
-            x -= math.cos(math.radians(self.angle))*self.speed
-            y += math.sin(math.radians(self.angle))*self.speed
+            x -= math.cos(math.radians(self.angle))*speed
+            y += math.sin(math.radians(self.angle))*speed
         elif speed >= 0:
             speed = 0
-            x -= math.cos(math.radians(self.angle))*self.speed
-            y += math.sin(math.radians(self.angle))*self.speed
+            x -= math.cos(math.radians(self.angle))*speed
+            y += math.sin(math.radians(self.angle))*speed
         return x, y, speed
 
     def draw(self, screen):
