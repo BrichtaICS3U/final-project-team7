@@ -20,10 +20,16 @@ BLOOD  = (255, 115, 60)
 PINK = (255, 96, 210)
 TURQ = (70, 77, 219)
 
+global x, y, speed
+speed = 0 
+x = 0
+y = 0
+
 SCREENWIDTH = 800
 SCREENHEIGHT = 800
 size = (SCREENWIDTH, SCREENHEIGHT)
 screen = pygame.display.set_mode(size)
+
 
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
 pygame.mixer.music.load('Black Panther - Trailer Song (Vince Staples - BagBak).mp3')
@@ -179,7 +185,7 @@ while carryOn:
         screen.blit(text, (275,20))
 
     elif level == 2:
-        screen.blit(background,(x,y))
+        screen.blit(background,(0,0))
         for button in level2_buttons:
             button.draw()
         font = pygame.font.SysFont('alternategothic',30)
@@ -233,19 +239,13 @@ while carryOn:
 
             camera = pygame.math.Vector2(0, 0)
             
-            global x
-            global y
-
-            global speed
-            speed = 10
-
-            x = 0
-            y = 0
+           
             done = False
 
             while not done:
+                global x, y, speed
                 screen.fill(WHITE)
-                screen.blit(bg,[0,0])
+                screen.blit(bg,(x,y))
 
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
@@ -257,14 +257,17 @@ while carryOn:
                     if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
                         player.rotRight(7)
                     if keys[pygame.K_UP] or keys[pygame.K_w]:
-                        player.accelerate(x,y,speed)
-                    elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
-                        player.moveBackward(x,y,speed)
+                        x, y, speed = player.accelerate(x,y,speed)
+                    if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                        x, y, speed = player.moveBackward(x,y,speed)
+                    else:
+                        x, y, speed = player.deccelerate(x, y, speed)
                    
 
                     all_sprites.update()
                     all_sprites.draw(screen)
         
+                    time = clock.tick(60)
                     pygame.display.flip()
                     
 
