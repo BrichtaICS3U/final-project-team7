@@ -53,13 +53,13 @@ class Player(pygame.sprite.Sprite):
         return x, y, speed
     
     def accelerate(self, x, y, speed):
-        speed += 4.99
+        speed += 1
         x -= math.cos(math.radians(self.angle))*speed
         y += math.sin(math.radians(self.angle))*speed
         return x, y, speed
     
     def deccelerate(self, x, y, speed):
-        if speed >= 3:
+        if speed >= 1:
             speed *= 1
             x -= math.cos(math.radians(self.angle))*speed
             y += math.sin(math.radians(self.angle))*speed

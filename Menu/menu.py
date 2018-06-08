@@ -34,6 +34,9 @@ screen = pygame.display.set_mode(size)
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=4096)
 pygame.mixer.music.load('Black Panther - Trailer Song (Vince Staples - BagBak).mp3')
 pygame.mixer.music.play(-1)
+
+music_playing = True
+
 class Button():
     """This is a class for a generic button.
     
@@ -123,6 +126,18 @@ def my_quit_function():
     pygame.quit()
     sys.exit()
 
+def my_on_function():
+   global music_playing
+   if music_playing == False:
+        pygame.mixer.music.unpause()
+        music_playing = True
+
+def my_off_function():
+    global music_playing
+    if music_playing == True:
+        pygame.mixer.music.pause()
+        music_playing = False
+
 def mousebuttondown(level):
     """A function that checks which button was pressed"""
     pos = pygame.mouse.get_pos()
@@ -134,6 +149,7 @@ def mousebuttondown(level):
         for button in level2_buttons:
             if button.rect.collidepoint(pos):
                 button.call_back()
+
 
     elif level == 3:
         for button in level3_buttons:
@@ -151,12 +167,12 @@ clock = pygame.time.Clock()
 
 #create button objects
 button_Play = Button('Play', (SCREENWIDTH/12, SCREENHEIGHT/8),my_play_function, bg=(WHITE), fg = (BLACK))
-button_Previous = Button("TReturn", (SCREENWIDTH/2, SCREENHEIGHT*10/11), my_previous_function, bg=(WHITE))
+button_Previous = Button("Return", (SCREENWIDTH/2, SCREENHEIGHT*10/11), my_previous_function, bg=(WHITE))
 button_previous = Button("Return", (SCREENWIDTH/2, SCREENHEIGHT*9/11), my_Previous_function, bg=(WHITE))
 button_Quit = Button("Quit", (SCREENWIDTH*6/7, SCREENHEIGHT*10/11), my_quit_function, bg =(WHITE))
 button_Settings = Button("Settings", (SCREENWIDTH/12, SCREENHEIGHT/4),my_settings_function, bg=(WHITE))
-button_On = Button("ON", (SCREENWIDTH/4, SCREENHEIGHT/3), my_on_function, bg=(WHITE))
-button_Off = Button("OFF", (SCREENWIDTH*3/4, SCREENHEIGHT/3), my_off_function, bg=(WHITE))
+button_On = Button("ON", (SCREENWIDTH/4, SCREENHEIGHT/6), my_on_function, bg=(WHITE))
+button_Off = Button("OFF", (SCREENWIDTH*3/4, SCREENHEIGHT/6), my_off_function, bg=(WHITE))
 button_Continue = Button('Continue',(SCREENWIDTH/2, SCREENHEIGHT*10/11), my_continue_function, bg = (WHITE))
 #arrange button groups depending on level
 level1_buttons = [button_Settings, button_Play, button_Quit]
